@@ -20,6 +20,12 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Replicated Object")
 	virtual bool IsSupportedForNetworking() const override;
 
+	// Override list of replicated variables?
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	// Override replication of sub objects?
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -30,3 +36,5 @@ public:
 
 		
 };
+
+virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
