@@ -2,10 +2,10 @@
 
 
 #include "SGActorComponent.h"
+#include "SGReplicatedObject.h"
 
 // Sets default values for this component's properties
-USGActorComponent::USGActorComponent(const FObjectInitializer& OI)
-	: Super(OI)
+USGActorComponent::USGActorComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -25,7 +25,7 @@ void USGActorComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
 }
 
 void USGActorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -66,7 +66,7 @@ bool USGActorComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* B
 	// hence why it isn't compiling.
 
 	// Loop through all the subobjects we want to replicate, replicate the object's subobjects, then replicate the object.
-	for (USGReplicatedObject Obj : SubobjectsToReplicate)
+	for (USGReplicatedObject* Obj : SubobjectsToReplicate)
 	{
 		if (IsValid(Obj)) // ensure that the object isn't null
 		{

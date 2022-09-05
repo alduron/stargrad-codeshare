@@ -9,14 +9,14 @@
 #include "SGActorComponent.generated.h"
 
 // Blueprintable may be wrong in this context, not sure.  // Not at all. This means that the class will be able to be inherited from by blueprints.
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable, BlueprintType) // Adding BlueprintType will allow this class to be referenced in blueprints.
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), Blueprintable, BlueprintType) // Adding BlueprintType will allow this class to be referenced in blueprints.
 class STARGRAD_API USGActorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
-	USGActorComponent(const FObjectInitializer& OI); // Note: The "const FObjectInitializer& OI" isn't needed anymore, and is deprecated if I recall.
+	USGActorComponent(); // Note: The "const FObjectInitializer& OI" isn't needed anymore, and is deprecated if I recall.
 													 // The function declaration can just as well be USGActorComponent(); with nothing in the parenthesis.
 													 // Remember to change the .cpp file as well. However, it's not hurting anything so your call.
 
@@ -33,7 +33,7 @@ public:
 	// THE OBJECTS IN THIS ARRAY SHOULD ONLY BE SUBOBJECTS OF THIS OBJECT!!!
 	// You will be able to add and remove objects from this list entirely in blueprints.
 	UPROPERTY(BlueprintReadWrite, Category = "Replication")
-	TArray<class USGReplicatedObject*> SubobjectsToReplicate;
+		TArray<class USGReplicatedObject*> SubobjectsToReplicate;
 
 	// To get any given object, or object list, to replicate, you must have the object, or object list, set to replicate in blueprints,
 	// then add it to the SubobjectsToReplicate array. Note: This will only work with objects derived from this class.
@@ -49,8 +49,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+
 };

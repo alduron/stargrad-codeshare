@@ -9,7 +9,7 @@
 #include "SGReplicatedObject.generated.h" 
 
 // This creates a blueprint event that will be called whenever the object is destroyed. This is a better way of having other classes notified of this classes destruction. 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FReplicatedObjectOnDestoyedSignature, class SGReplicatedObject, DestroyedObject);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FReplicatedObjectOnDestoyedSignature, class USGReplicatedObject*, DestroyedObject);
 
 /**
  *
@@ -24,7 +24,7 @@ public:
 
 	// Allows the OnDestroyed event to be binded to in blueprints.
 	UPROPERTY(BlueprintAssignable)
-	FReplicatedObjectOnDestoyedSignature OnDestroyed;
+		FReplicatedObjectOnDestoyedSignature OnDestroyed;
 
 	// THIS FUNCTION IS ESSENTIAL IF YOU WANT YOU OBJECTS TO BE ABLE TO REPLICATE THEIR PROPERTIES!!!!
 	// Replicates the properties on an object.
@@ -36,11 +36,11 @@ public:
 	// Get outer as owner   // A more descriptive comment would be "Gets the nearest parent that is an actor".
 	// This is NOT getting the outer and casting it to type AActor. Instead it is walking up the outer chain of objects until it finds an object that is an actor.
 	UFUNCTION(BlueprintPure, Category = "Replicated Object")
-	AActor* GetOwningActor() const;
+		AActor* GetOwningActor() const;
 
 	// Override replication setting   // Yep, very simple.
 	UFUNCTION(BlueprintPure, Category = "Replicated Object")
-	virtual bool IsSupportedForNetworking() const override;
+		virtual bool IsSupportedForNetworking() const override;
 
 	// Get owning actor's RPC context I think   // Yes, you are exactly correct.
 	virtual int32 GetFunctionCallspace(UFunction* Function, FFrame* Stack) override;
@@ -56,7 +56,7 @@ public:
 	// because if the object looses all references it gets destroyed automatically. However, this means you also must take extra care when destroying the object,
 	// as there could still be references that will become null when you destroy it. That's not a bad thing just something that you will have to be aware of.
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Replicated Object")
-	void Destroy();
+		void Destroy();
 
 
 	// This function is denoted as protected and virtual and therefore will not be able to be overridden or called from blueprints.
@@ -65,10 +65,10 @@ protected:
 	// virtual void OnDestroyed();
 
 	// Updated function declaration
-	UFUNCTION(BlueprintNativeEvent) // BlueprintNativeEvent specifier allows this function to be overridden in blueprints.
-	void BeginDestroy(); // Renamed to BeginDestroy to be more similar to the actor naming scheme for destory functions.
-	// Note: This function is not callable in blueprints due to the lack of the BlueprintCallable specifier.
-	//       This is by design as the fuction is called automatically when the Destroy() function is called.
+	//UFUNCTION(BlueprintNativeEvent) // BlueprintNativeEvent specifier allows this function to be overridden in blueprints.
+		//void BeginDestroy(); // Renamed to BeginDestroy to be more similar to the actor naming scheme for destory functions.
+		// Note: This function is not callable in blueprints due to the lack of the BlueprintCallable specifier.
+		//       This is by design as the fuction is called automatically when the Destroy() function is called.
 
 
 
@@ -79,7 +79,7 @@ public:
 	// THE OBJECTS IN THIS ARRAY SHOULD ONLY BE SUBOBJECTS OF THIS OBJECT!!!
 	// You will be able to add and remove objects from this list entirely in blueprints.
 	UPROPERTY(BlueprintReadWrite, Category = "Replication")
-	TArray<class USGReplicatedObject*> SubobjectsToReplicate;
+		TArray<class USGReplicatedObject*> SubobjectsToReplicate;
 
 	// To get any given object, or object list, to replicate, you must have the object, or object list, set to replicate in blueprints,
 	// then add it to the SubobjectsToReplicate array. Note: This will only work with objects derived from this class.
@@ -88,6 +88,9 @@ public:
 
 	// The second part is the ReplicateSubobjects function where we replicate all the objects in the above list.
 
+	void BeginDestroy_Implementation();
+
 	// Replicate any subobjects this object has. Note: the override keyword isn't present as this function doesn't exist on UObject.
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags);
+
 };

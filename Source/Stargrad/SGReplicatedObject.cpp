@@ -5,7 +5,7 @@
 
 
 /**
- * 
+ *
  */
 
 USGReplicatedObject::USGReplicatedObject()
@@ -13,10 +13,10 @@ USGReplicatedObject::USGReplicatedObject()
 	//Construct
 }
 
-virtual void USGReplicatedObject::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override
+void USGReplicatedObject::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
+
 	// Here is where you would replcate all the properties present on your C++ object
 	// using the DOREPLIFETIME(USGReplicatedObject, MyVar) macro.
 	// Since this object has no C++ properties it can be skipped.
@@ -109,12 +109,12 @@ void USGReplicatedObject::BeginDestroy_Implementation() // Note: the "_Implement
 
 
 
-virtual bool USGReplicatedObject::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+bool USGReplicatedObject::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
 	bool bWroteSomething = false;
 
 	// Loop through all the subobjects we want to replicate, replicate the object's subobjects, then replicate the object.
-	for (USGReplicatedObject Obj : SubobjectsToReplicate)
+	for (USGReplicatedObject* Obj : SubobjectsToReplicate)
 	{
 		if (IsValid(Obj)) // ensure that the object isn't null
 		{
