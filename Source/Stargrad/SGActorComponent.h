@@ -14,7 +14,7 @@ class STARGRAD_API USGActorComponent : public UActorComponent
 
 public:	
 	// Sets default values for this component's properties
-	USGActorComponent();
+	USGActorComponent(const FObjectInitializer& OI);
 
 	// Override list of replicated variables?
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

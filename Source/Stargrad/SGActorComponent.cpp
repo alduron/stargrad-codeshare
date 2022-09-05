@@ -4,7 +4,8 @@
 #include "SGActorComponent.h"
 
 // Sets default values for this component's properties
-USGActorComponent::USGActorComponent()
+USGActorComponent::USGActorComponent(const FObjectInitializer& OI)
+	: Super(OI)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -25,9 +26,9 @@ void USGActorComponent::BeginPlay()
 
 void USGActorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	/* These do not compile? Am I missing an include class?
 	* Am I able to replicate any variable that I add in Blueprints?
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(USGActorComponent, LocalInventory);
 	DOREPLIFETIME(USGActorComponent, BagInventory);
 	*/
