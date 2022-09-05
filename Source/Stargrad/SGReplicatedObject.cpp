@@ -116,8 +116,11 @@ virtual bool USGReplicatedObject::ReplicateSubobjects(UActorChannel* Channel, FO
 	// Loop through all the subobjects we want to replicate, replicate the object's subobjects, then replicate the object.
 	for (USGReplicatedObject Obj : SubobjectsToReplicate)
 	{
-		bWroteSomething |= Obj->ReplicateSubobjects(Channel, Bunch, RepFlags); // Replicate the subobjects of "Obj"
-		bWroteSomething |= bWroteSomething |= Channel->ReplicateSubobject(Obj, *Bunch, *RepFlags); // Replicate "Obj"
+		if (IsValid(Obj)) // ensure that the object isn't null
+		{
+			bWroteSomething |= Obj->ReplicateSubobjects(Channel, Bunch, RepFlags); // Replicate the subobjects of "Obj"
+			bWroteSomething |= bWroteSomething |= Channel->ReplicateSubobject(Obj, *Bunch, *RepFlags); // Replicate "Obj"
+		}
 	}
 
 	return bWroteSomething;
