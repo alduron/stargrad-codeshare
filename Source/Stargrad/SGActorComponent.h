@@ -16,13 +16,8 @@ public:
 	// Sets default values for this component's properties
 	USGActorComponent();
 
-	//Override replication
-	UFUNCTION(BlueprintPure, Category = "Replicated Object")
-	virtual bool IsSupportedForNetworking() const override;
-
 	// Override list of replicated variables?
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 
 	// Override replication of sub objects?
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;

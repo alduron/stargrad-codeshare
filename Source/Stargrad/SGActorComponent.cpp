@@ -23,12 +23,6 @@ void USGActorComponent::BeginPlay()
 	
 }
 
-// Force Replication
-bool USGActorComponent::IsSupportedForNetworking() const
-{
-	return true;
-}
-
 void USGActorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	/* These do not compile? Am I missing an include class?
