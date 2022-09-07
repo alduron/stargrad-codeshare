@@ -61,23 +61,15 @@ public:
 
 	// This function is denoted as protected and virtual and therefore will not be able to be overridden or called from blueprints.
 	// The protected part is good as that limits the access of this function to this class only, however it should have a UFUNCTION tag on it.
-protected:
-	// virtual void OnDestroyed();
 
-	// Updated function declaration
-	//UFUNCTION(BlueprintNativeEvent) // BlueprintNativeEvent specifier allows this function to be overridden in blueprints.
-		//void BeginDestroy(); // Renamed to BeginDestroy to be more similar to the actor naming scheme for destory functions.
-		// Note: This function is not callable in blueprints due to the lack of the BlueprintCallable specifier.
-		//       This is by design as the fuction is called automatically when the Destroy() function is called.
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Replicated Object")
+		virtual bool UpdateOuter(UActorComponent* NewOuter);
 
-
-
-public:
 	// Everything up to this point was standard replication stuff for replicating objects in C++ only. However, since you want to work primarily in blueprints
-	// some additional code can be setup to allow any child of the SGReplicatedObject class to be replicated entirely in blueprints.
-	// The first part of this is creating an array of all the subobjects we want to replicate.
-	// THE OBJECTS IN THIS ARRAY SHOULD ONLY BE SUBOBJECTS OF THIS OBJECT!!!
-	// You will be able to add and remove objects from this list entirely in blueprints.
+// some additional code can be setup to allow any child of the SGReplicatedObject class to be replicated entirely in blueprints.
+// The first part of this is creating an array of all the subobjects we want to replicate.
+// THE OBJECTS IN THIS ARRAY SHOULD ONLY BE SUBOBJECTS OF THIS OBJECT!!!
+// You will be able to add and remove objects from this list entirely in blueprints.
 	UPROPERTY(BlueprintReadWrite, Category = "Replication")
 		TArray<class USGReplicatedObject*> SubobjectsToReplicate;
 
@@ -88,9 +80,16 @@ public:
 
 	// The second part is the ReplicateSubobjects function where we replicate all the objects in the above list.
 
-	void BeginDestroy_Implementation();
-
 	// Replicate any subobjects this object has. Note: the override keyword isn't present as this function doesn't exist on UObject.
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags);
+
+protected:
+	// virtual void OnDestroyed();
+
+	// Updated function declaration
+	UFUNCTION(BlueprintNativeEvent) // BlueprintNativeEvent specifier allows this function to be overridden in blueprints.
+		void BeginDestroyBP(); // Renamed to BeginDestroy to be more similar to the actor naming scheme for destory functions.
+		// Note: This function is not callable in blueprints due to the lack of the BlueprintCallable specifier.
+		//       This is by design as the fuction is called automatically when the Destroy() function is called.
 
 };

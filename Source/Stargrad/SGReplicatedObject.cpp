@@ -74,6 +74,7 @@ bool USGReplicatedObject::CallRemoteFunction(UFunction* Function, void* Parms, F
 	return false;
 }
 
+//Destroy notification
 void USGReplicatedObject::Destroy()
 {
 	if (!IsValid(this))
@@ -81,9 +82,20 @@ void USGReplicatedObject::Destroy()
 		checkf(GetOwningActor()->HasAuthority() == true, TEXT("Destroy:: Object does not have authority to destroy itself!"));
 
 		OnDestroyed.Broadcast(this); // Notifies any blueprints that have bound to the event that we are being destroyed. The "this" denotes that this is the object begin destroyed.
-		BeginDestroy();
+		BeginDestroyBP();
 		MarkAsGarbage();
 	}
+}
+
+//Update UObject owner for replication info
+bool USGReplicatedObject::UpdateOuter(UActorComponent* NewOuter)
+{
+	if (IsValid(NewOuter))
+	{
+		Rename(nullptr, NewOuter);
+		return true;
+	}
+	return false;
 }
 
 //void USGReplicatedObject::OnDestroyed()
@@ -92,7 +104,7 @@ void USGReplicatedObject::Destroy()
 //}
 
 // Updated definition
-void USGReplicatedObject::BeginDestroy_Implementation() // Note: the "_Implementation" bit at the end is a c++ only thing and doesn't apply to blueprints. This is required because of the "BlueprintNativeEvent" specifier.
+void USGReplicatedObject::BeginDestroyBP_Implementation() // Note: the "_Implementation" bit at the end is a c++ only thing and doesn't apply to blueprints. This is required because of the "BlueprintNativeEvent" specifier.
 {
 	// This is where you would handle anything related to deletion of this object.
 	// Note: Since this is now a blueprint native event this function can have an implementation in blueprints instead of here.
